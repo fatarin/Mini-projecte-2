@@ -84,8 +84,43 @@
           renderizarProductos();
         };
 
+        //funcion para añadir productos
         function anyadirProductoAlCarrito() {
-            
+            //recogemos ul carrito
+            let listaLI = document.getElementById('carrito');
+            //array de li
+            let arrayListaLI = Array.from(listaLI.children);
+            console.log(arrayListaLI);
+            //desde botón recuperamos dos hermanos previos para llegar a nombre
+            let esteNombre = this.previousElementSibling.previousElementSibling.textContent;
+            console.log(esteNombre);
+            let estePrecio = this.previousElementSibling.textContent;
+            //añadir linea al carrito
+            listaLI.innerHTML += `<li>${esteNombre} - ${estePrecio} <button class="secondary">X</li>`;
+
+            //almacenar cesta
+            let cesta = {
+                cantidad: 1,
+                nombre: '${esteNombre}',
+                precio: ${estePrecio}
+            };
+
+            console.log(cesta);
+
+
+            //============= CALCULAR TOTAL =====================
+            //recoger lista Li
+
+            //recorrer y sumar
+                
+                let sumaTotal = arrayListaLI.reduce((suma, elemento) => {
+                    console.log('suma', suma);
+                    console.log('precio', elemento.precio);
+                    suma += elemento.precio;
+                }, 0);
+                console.log(sumaTotal);
+                document.getElementById('total').textContent = sumaTotal; 
+            //mostrar
         }
     </script>
 </head>
