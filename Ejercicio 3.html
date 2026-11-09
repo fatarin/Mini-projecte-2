@@ -95,17 +95,48 @@
             let esteNombre = this.previousElementSibling.previousElementSibling.textContent;
             console.log(esteNombre);
             let estePrecio = this.previousElementSibling.textContent;
-            //añadir linea al carrito
-            listaLI.innerHTML += `<li>${esteNombre} - ${estePrecio} <button class="secondary">X</li>`;
-
-            //almacenar cesta
-            let cesta = {
-                cantidad: 1,
-                nombre: '${esteNombre}',
-                precio: ${estePrecio}
+            //añadir linea al carrito -- REVISAR COMO MOSTRAR ESTO DESDE ARRAY OBJETOS
+            const arrayCesta = [];
+            
+            let objetoCesta = {
+                nombre: "",
+                precio: "",
+                cantidad: ""
             };
 
-            console.log(cesta);
+            
+            function añadirCompra(nombre, precio, array) {
+                console.log('nombre en funcion', nombre);
+                console.log('precio en funcion', precio);
+                let existe = array.find(elemento => elemento.nombre === nombre);
+                console.log('existe', existe);
+                if (existe) {
+                    console.log('existe nombre: ', existe.nombre);
+                    console.log('existe', existe.cantidad);
+                    existe.cantidad += 1;
+                } else {
+                    console.log('creo objeto nuevo');
+                    let nuevoObjeto = {
+                        nombre: nombre,
+                        precio: precio,
+                        cantidad: 1 
+                    };
+                    array.push(nuevoObjeto);
+                    console.log('array', arrayCesta);
+                    console.log('nuevoobjeto' , nuevoObjeto);
+                };
+            };
+
+
+            //listaLI.innerHTML += `<li>${esteNombre} - ${estePrecio} <button class="secondary">X</li>`;
+                añadirCompra(esteNombre, estePrecio, arrayCesta);
+            //almacenar cesta ARRAY OBJETOS
+            
+
+            
+           
+
+            
 
 
             //============= CALCULAR TOTAL =====================
