@@ -38,6 +38,7 @@
 
           const divisa = '€';
           const DOMitems = document.querySelector('#items');
+          const listaCarrito = [];
 
           // Funciones
 
@@ -69,7 +70,7 @@
                   miNodoBoton.classList.add('btn', 'btn-primary');
                   miNodoBoton.textContent = '+';
                   miNodoBoton.setAttribute('marcador', info.id);
-                  miNodoBoton.addEventListener('click', anyadirProductoAlCarrito);
+                  //miNodoBoton.addEventListener('click', anyadirProductoAlCarrito);
                   // Insertamos
                   miNodoCardBody.appendChild(miNodoImagen);
                   miNodoCardBody.appendChild(miNodoTitle);
@@ -82,11 +83,68 @@
 
           // Inicio
           renderizarProductos();
+
+          //funcion para recorrer y mostrar datos acumulados en listaCarrito
+          function actualizaCarrito(){
+            //console.log('entrado en actualizaCarrito');
+            //recoger ul
+            let listaElementos = document.getElementById('carrito');
+            //inicializar listado
+            listaElementos.innerHTML = "";
+            //console.log('lista: ' , listaElementos);
+            //recorrer listaCarrito y añadir html a carrito(ul)
+            listaCarrito.forEach((elemento) => {
+                listaElementos.innerHTML += `<li>${elemento.cantidad} - ${elemento.nombre} ${elemento.precio}<button class="primary">X</button></li>`;
+            });
+          };
+
+          //añadir productos (objeto) en array listaCarrito
+            function anyadirProductoAlCarrito(nombre, precio) {
+                        //console.log('lista carrito: ', listaCarrito);
+                        //console.log('nombre recibido: ', nombre);
+                        //console.log('precio recibido: ', precio);
+                        
+                        let nuevoObjeto = {
+                            nombre: nombre,
+                            precio: precio,
+                            cantidad: 1
+                        };
+                        //console.log('nuevo objeto: ', nuevoObjeto);
+                        // FALTA COMPROBAR SI EXISTE
+                        listaCarrito.push(nuevoObjeto);
+                        console.log('lista actualizada' , listaCarrito);
+                        actualizaCarrito();
+            };
+
+        /*===============   AÑADIR EVENTO A BOTON + ====================*/
+            //recoger botones +
+            let botonMas = Array.from(document.getElementsByClassName('btn'));
+            //console.log(botonMas);
+            //recorrer botones
+            botonMas.forEach((elemento) => {
+                //añadir evento
+                elemento.addEventListener('click', () => {
+                    console.log('boton pulsado');
+                    //recoger nombre
+                    let nombreProducto = elemento.previousElementSibling.previousElementSibling.textContent;
+                    console.log('nombre pulsado: ', nombreProducto);
+
+                    //recoger precio
+                    let precioProducto = elemento.previousElementSibling.textContent;
+                    console.log('precio pulsado: ', precioProducto);
+
+                    anyadirProductoAlCarrito(nombreProducto, precioProducto);
+
+                });
+            });
+            
+       
+
         };
 
-        function anyadirProductoAlCarrito() {
-            
-        }
+        
+
+
     </script>
 </head>
 <body>
