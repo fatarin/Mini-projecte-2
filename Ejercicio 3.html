@@ -70,12 +70,20 @@
                   miNodoBoton.classList.add('btn', 'btn-primary');
                   miNodoBoton.textContent = '+';
                   miNodoBoton.setAttribute('marcador', info.id);
+                  /*añadimos boton - */
+                  const miNodoBotonMenos = document.createElement('button');
+                  miNodoBotonMenos.classList.add('btn', 'btn-secondary');
+                  miNodoBotonMenos.disabled = true;
+                  miNodoBotonMenos.textContent = '-';
+                  miNodoBotonMenos.setAttribute('marcador', info.id);
+                  miNodoBotonMenos.id = info.nombre;
                   //miNodoBoton.addEventListener('click', anyadirProductoAlCarrito);
                   // Insertamos
                   miNodoCardBody.appendChild(miNodoImagen);
                   miNodoCardBody.appendChild(miNodoTitle);
                   miNodoCardBody.appendChild(miNodoPrecio);
                   miNodoCardBody.appendChild(miNodoBoton);
+                  miNodoCardBody.appendChild(miNodoBotonMenos);
                   miNodo.appendChild(miNodoCardBody);
                   DOMitems.appendChild(miNodo);
               });
@@ -83,6 +91,27 @@
 
           // Inicio
           renderizarProductos();
+
+
+
+          /*============ AÑADIR EVENTO A BOTON X ================*/
+          //capturar todos los botones x
+          
+          function borrarLinea() {
+                let botonBorrarLinea = Array.from(document.getElementsByName('borrar_fila'));
+                console.log('borrarfila', botonBorrarLinea);
+                botonBorrarLinea.forEach((elemento) => {
+                    elemento.addEventListener('click', () => {
+                        //borramos del array la posicion identificada con indice en que se ha creado boton X
+                        console.log('id', elemento.id);
+                        let nombreX = elemento.id.nombre;
+                        document.getElementById(nombreX).disabled = true;
+                        listaCarrito.splice([parseInt(elemento.id)], 1);
+                        actualizaCarrito();
+                        
+                    });
+                });
+            };
 
           //funcion para recorrer y mostrar datos acumulados en listaCarrito
           function actualizaCarrito(){
@@ -92,15 +121,27 @@
             //inicializar listado
             listaElementos.innerHTML = "";
             //console.log('lista: ' , listaElementos);
+
+            //variable para almacenar Total
+            let importeTotal = 0;
             //recorrer listaCarrito y añadir html a carrito(ul)
-            listaCarrito.forEach((elemento) => {
-                listaElementos.innerHTML += `<li>${elemento.cantidad} - ${elemento.nombre} ${elemento.precio}<button name="borrar_fila" class="primary">X</button></li>`;
+            listaCarrito.forEach((elemento, indice) => {
+                listaElementos.innerHTML += `<li>${elemento.cantidad} - ${elemento.nombre} ${elemento.precio}<button name="borrar_fila" class="primary" id=${indice}>X</button></li>`;
+                //calcular importe total acumulando cantidad * precio
+                importeTotal += parseInt(elemento.cantidad) * parseFloat(elemento.precio);
+          
+
             });
+            
+            //añadir evento al boton x creado
+            borrarLinea();
+            //cargar importe calculado en id="total"
+             document.getElementById('total').textContent = importeTotal.toFixed(2);
           };
 
           //añadir productos (objeto) en array listaCarrito
             function anyadirProductoAlCarrito(nombre, precio) {
-                        //console.log('lista carrito: ', listaCarrito);
+                        console.log('lista carrito: ', listaCarrito);
                         //console.log('nombre recibido: ', nombre);
                         //console.log('precio recibido: ', precio);
                         
@@ -110,15 +151,25 @@
                             cantidad: 1
                         };
                         //console.log('nuevo objeto: ', nuevoObjeto);
-                        // FALTA COMPROBAR SI EXISTE
-                        listaCarrito.push(nuevoObjeto);
+                        // COMPROBAR SI EXISTE
+                        
+                        let existe = listaCarrito.find(elemento => elemento.nombre === nuevoObjeto.nombre);
+                        let posicionModificar = listaCarrito.findIndex(elemento => elemento.nombre === nuevoObjeto.nombre);
+                        //console.log('posicion', posicionModificar);
+                        //console.log('existe', existe);
+                        if(existe){
+                            listaCarrito[posicionModificar].cantidad ++;
+                            
+                        } else{
+                            listaCarrito.push(nuevoObjeto);
+                        }
                         console.log('lista actualizada' , listaCarrito);
                         actualizaCarrito();
             };
 
         /*===============   AÑADIR EVENTO A BOTON + ====================*/
             //recoger botones +
-            let botonMas = Array.from(document.getElementsByClassName('btn'));
+            let botonMas = Array.from(document.getElementsByClassName('btn-primary'));
             //console.log(botonMas);
             //recorrer botones
             botonMas.forEach((elemento) => {
@@ -135,10 +186,42 @@
 
                     anyadirProductoAlCarrito(nombreProducto, precioProducto);
 
+
+                    /*====== habilitar boton - ===============*/
+                    elemento.nextElementSibling.removeAttribute('disabled');
+
                 });
             });
+
+            /*============AÑADIR EVENTO A BOTON - ===========================*/
+            let botonMenos = Array.from(document.getElementsByClassName('btn-secondary'));
+            botonMenos.forEach((elemento) => {
+                elemento.addEventListener('click', () => {
+                    let nombreProducto = elemento.previousElementSibling.previousElementSibling.previousElementSibling.textContent;
+                    
+                    let elementoRestar = listaCarrito.findIndex(elemento => elemento.nombre === nombreProducto);
+                    listaCarrito[elementoRestar].cantidad -= 1;
+                    if (listaCarrito[elementoRestar].cantidad == 0){
+                        listaCarrito.splice(elementoRestar, 1);
+                        elemento.disabled = true;
+                    };
+                   
+                    actualizaCarrito();
+                });
+                
+            });
+
+
             
-       
+       /*================== AÑADIR EVENTO A BOTON VACIAR ===========================*/
+       document.getElementById('boton-vaciar').addEventListener('click', () => {
+            console.log('vaciar');
+            //borrar array
+            //listaCarrito.length = 0;
+            //otra alternativa de borrado
+            listaCarrito.splice(0);
+            actualizaCarrito();
+       });
 
         };
 
