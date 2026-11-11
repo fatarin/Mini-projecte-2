@@ -94,7 +94,7 @@
             //console.log('lista: ' , listaElementos);
             //recorrer listaCarrito y añadir html a carrito(ul)
             listaCarrito.forEach((elemento) => {
-                listaElementos.innerHTML += `<li>${elemento.cantidad} - ${elemento.nombre} ${elemento.precio}<button class="primary">X</button></li>`;
+                listaElementos.innerHTML += `<li>${elemento.cantidad} - ${elemento.nombre} ${elemento.precio}<button name="borrar_fila" class="primary">X</button></li>`;
             });
           };
 
