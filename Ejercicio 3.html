@@ -84,74 +84,8 @@
           renderizarProductos();
         };
 
-        //funcion para añadir productos
         function anyadirProductoAlCarrito() {
-            //recogemos ul carrito
-            let listaLI = document.getElementById('carrito');
-            //array de li
-            let arrayListaLI = Array.from(listaLI.children);
-            console.log(arrayListaLI);
-            //desde botón recuperamos dos hermanos previos para llegar a nombre
-            let esteNombre = this.previousElementSibling.previousElementSibling.textContent;
-            console.log(esteNombre);
-            let estePrecio = this.previousElementSibling.textContent;
-            //añadir linea al carrito -- REVISAR COMO MOSTRAR ESTO DESDE ARRAY OBJETOS
-            const arrayCesta = [];
             
-            let objetoCesta = {
-                nombre: "",
-                precio: "",
-                cantidad: ""
-            };
-
-            
-            function añadirCompra(nombre, precio, array) {
-                console.log('nombre en funcion', nombre);
-                console.log('precio en funcion', precio);
-                let existe = array.find(elemento => elemento.nombre === nombre);
-                console.log('existe', existe);
-                if (existe) {
-                    console.log('existe nombre: ', existe.nombre);
-                    console.log('existe', existe.cantidad);
-                    existe.cantidad += 1;
-                } else {
-                    console.log('creo objeto nuevo');
-                    let nuevoObjeto = {
-                        nombre: nombre,
-                        precio: precio,
-                        cantidad: 1 
-                    };
-                    array.push(nuevoObjeto);
-                    console.log('array', arrayCesta);
-                    console.log('nuevoobjeto' , nuevoObjeto);
-                };
-            };
-
-
-            //listaLI.innerHTML += `<li>${esteNombre} - ${estePrecio} <button class="secondary">X</li>`;
-                añadirCompra(esteNombre, estePrecio, arrayCesta);
-            //almacenar cesta ARRAY OBJETOS
-            
-
-            
-           
-
-            
-
-
-            //============= CALCULAR TOTAL =====================
-            //recoger lista Li
-
-            //recorrer y sumar
-                
-                let sumaTotal = arrayListaLI.reduce((suma, elemento) => {
-                    console.log('suma', suma);
-                    console.log('precio', elemento.precio);
-                    suma += elemento.precio;
-                }, 0);
-                console.log(sumaTotal);
-                document.getElementById('total').textContent = sumaTotal; 
-            //mostrar
         }
     </script>
 </head>
